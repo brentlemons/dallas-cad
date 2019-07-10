@@ -62,6 +62,13 @@ exports.handler = async (event) => {
         const object = await getObject(record.bucket.name, record.object.key);
         
         var body = object.Body.toString();
+
+        turf.featureEach(JSON.parse(body), function(currentFeature, featureIndex) {
+            console.log(currentFeature);
+        })
+
+
+
     }
 
 
