@@ -63,9 +63,9 @@ exports.handler = async (event) => {
         
         var body = object.Body.toString();
 
-        turf.featureEach(JSON.parse(body), function(currentFeature, featureIndex) {
+        turf.propEach(JSON.parse(body), (currentFeature, featureIndex) => {
             console.log(currentFeature);
-        })
+        });
 
 
 
