@@ -22,38 +22,6 @@ Globals:
         #   https://search-fltck-data-2uligen4rgr5uclyia6potjhei.us-west-2.es.amazonaws.com
 
 Resources:
-
-  GetAccount:
-    Type: AWS::Serverless::Function
-    Properties:
-      Description: 'This is my description'
-      MemorySize: 1024
-      Handler: functions/get-account.handler
-      Role: !GetAtt DefaultRole.Arn
-      Tags:
-        environment: !Ref StageName
-      Events:
-        GetRoot:
-          Type: Api
-          Properties:
-            RestApiId: !Ref WeatherRestApi
-            Method: get
-            Path: '/account/{account}'
-
-  MarchingSquares:
-    Type: 'AWS::Serverless::Function'
-    Properties:
-      Description: 'list the products'
-      MemorySize: 3008
-      Handler: functions/marching-squares.handler
-      Role: !GetAtt DefaultRole.Arn
-      Tags:
-        environment: !Ref StageName
-      # Environment:
-      #   Variables:
-          # esIndex: gribproductitem
-          # esType: wx
-
   ParcelGeojsonProcessor:
     Type: 'AWS::Serverless::Function'
     Properties:
