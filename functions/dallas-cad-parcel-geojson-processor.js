@@ -61,7 +61,7 @@ exports.handler = async (event) => {
     
         const object = await getObject(record.bucket.name, record.object.key);
         
-        var body = object.Body.toString();
+        var body = JSON.loads(object.Body.read());
 
         console.log(body.length);
 
