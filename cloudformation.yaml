@@ -1,0 +1,115 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'Dallas CAD API Resources'
+
+Parameters:
+  # For more details on managing environments in serverless applications see the
+  # article at https://medium.com/2pax/managing-multi-environment-serverless-architecture-using-aws-an-investigation-6cd6501d261e
+  StageName:
+    Type: String
+
+Globals:
+  Function:
+    Runtime: nodejs10.x
+    Timeout: 180
+    Environment:
+      Variables:
+        environment: !Ref StageName
+        # esIndex: wx
+        # esType: wx
+        # esRegion: us-west-2
+        # esHost: >-
+        #   https://search-fltck-data-2uligen4rgr5uclyia6potjhei.us-west-2.es.amazonaws.com
+
+Resources:
+
+  GetAccount:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: 'This is my description'
+      MemorySize: 1024
+      Handler: functions/get-account.handler
+      Role: !GetAtt DefaultRole.Arn
+      Tags:
+        environment: !Ref StageName
+      Events:
+        GetRoot:
+          Type: Api
+          Properties:
+            RestApiId: !Ref WeatherRestApi
+            Method: get
+            Path: '/account/{account}'
+
+  MarchingSquares:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: 'list the products'
+      MemorySize: 3008
+      Handler: functions/marching-squares.handler
+      Role: !GetAtt DefaultRole.Arn
+      Tags:
+        environment: !Ref StageName
+      # Environment:
+      #   Variables:
+          # esIndex: gribproductitem
+          # esType: wx
+
+  ParcelGeojsonProcessor:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Description: 'split geojson parcels'
+      MemorySize: 1024
+      Handler: functions/dallas-cad-parcel-geojson-processor.handler
+      Role: !GetAtt DefaultRole.Arn
+      Tags:
+        environment: !Ref StageName
+      Events:
+        GribBucketEvent:
+          Type: S3
+          Properties:
+            Bucket: !Ref ParcelSourceBucket
+            Events:
+              - 's3:ObjectCreated:*'
+
+  ParcelSourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub dallas-cad-parcel-source-${StageName}
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true          
+
+  DefaultRole: 
+    Type: 'AWS::IAM::Role'
+    Properties: 
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement: 
+          - 
+            Effect: 'Allow'
+            Principal: 
+              Service: 
+                - 'lambda.amazonaws.com'
+            Action: 
+              - 'sts:AssumeRole'
+      Path: '/'
+      Policies: 
+        - 
+          PolicyName: 'root'
+          PolicyDocument: 
+            Version: '2012-10-17'
+            Statement: 
+              - 
+                Effect: 'Allow'
+                Action:
+                - 'es:ESHttp*'
+                - 'lambda:*'
+                - 's3:*'
+                Resource: '*'
+              -
+                Effect: 'Allow'
+                Action:
+                - 'logs:*'
+                Resource: 'arn:aws:logs:*:*:*'

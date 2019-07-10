@@ -1,0 +1,26 @@
+{
+  "name": "dallas-cad",
+  "version": "1.0.0",
+  "description": "explore dallas cad data",
+  "main": "functions/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brentlemons/dallas-cad.git"
+  },
+  "author": "Brent Lemons",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brentlemons/dallas-cad/issues"
+  },
+  "homepage": "https://github.com/brentlemons/dallas-cad#readme",
+  "dependencies": {
+    "@turf/turf": "^5.1.6",
+    "elasticsearch": "^16.2.0",
+    "http-aws-es": "^6.0.0",
+    "moment": "^2.24.0",
+    "topojson-server": "^3.0.0"
+  }
+}

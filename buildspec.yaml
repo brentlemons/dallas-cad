@@ -1,0 +1,11 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      - npm install 
+      - aws cloudformation package --output-template-file dev-packaged.yaml --template-file cloudformation.yaml --s3-bucket dallas-cad-deploy
+artifacts:
+  type: zip
+  files:
+    - cloudformation.yaml
+    - dev-packaged.yaml
