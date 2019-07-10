@@ -55,6 +55,16 @@ exports.handler = async (event) => {
 
     console.log(JSON.stringify(event));
 
+    for (var pos = 0; pos < event.Records.length; ++pos) {
+
+        var record = event.Records[pos].s3;
+    
+        const object = await getObject(record.bucket.name, record.object.key);
+        
+        var body = object.Body.toString();
+    }
+
+
     // TODO implement
     const response = {
         statusCode: 200,
