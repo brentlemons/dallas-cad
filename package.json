@@ -20,7 +20,7 @@
     "@turf/turf": "^5.1.6",
     "elasticsearch": "^16.2.0",
     "http-aws-es": "^6.0.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "topojson-server": "^3.0.0"
   }
 }
